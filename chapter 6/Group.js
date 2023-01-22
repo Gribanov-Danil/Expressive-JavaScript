@@ -19,7 +19,23 @@ class Group {
         iterObj.forEach((el) => group.add(el))
         return group
     }
+
+    [Symbol.iterator]() {
+        return new GroupIterator(this)
+    }
 }
+
+class GroupIterator {
+    constructor(group) {
+        this.group = group
+        this.index = -1
+    }
+    next() {
+        this.index++
+        return this.index >= this.group.store.length ? {done: true} : {value: this.group.store[this.index], done: false}
+    }
+}
+
 
 let group = Group.from([10, 20]);
 console.log(group);
@@ -35,3 +51,9 @@ console.log(group.has(10));
 let arr = [1, 2]
 console.log(arr.indexOf(3))
 
+for (let value of Group.from(["a", "b", "c"])) {
+    console.log(value);
+}
+// → a
+// → b
+// → c
